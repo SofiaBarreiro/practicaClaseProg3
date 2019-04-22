@@ -1,175 +1,144 @@
 <?php
 
-
 include_once "..\LISTAALUMNOS\AccesoDatos.php";
 
 
-class Alumno{
+
+class Alumno
+{
 
     public $nombre;
-                                                 
+
     public $apellido;
 
     public $edad;
 
     public $legajo;
-    
+
     public $id;
 
-    
-    // function __construct($pnombre,$papellido, $pedad, $legajo) {
 
-    //    $this->nombre = $pnombre;
-
-    //    $this->apellido = $papellido;
-
-    //    $this->edad = $pedad;
-    
-    //    $this->legajo= $legajo;
-
-    // } 
+    function __construct($nombre, $apellido, $legajo, $edad, $id){
 
 
+
+    }
 
 
     public static function TraerTodoLosAlumnos()
-	{
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,edad as edad, legajo as legajo from Alumno");
-			$consulta->execute();			
-			return $consulta->fetchAll(PDO::FETCH_CLASS, "alumno");		
-	}
-
-    public static function TraerUnAlumno($id) 
-	{
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,edad as edad, legajo as legajo from alumno where id = $id");
-			$consulta->execute();
-			$alumnoBuscado= $consulta->fetchObject('alumno');
-			return $alumnoBuscado;				
-
-			
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,edad as edad, legajo as legajo from Alumno");
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "alumno");
     }
-    
-    public function InsertarElAlumno()
-	{
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into Alumno (nombre,apellido,edad,legajo)values('$this->nombre','$this->apellido','$this->edad','$this->legajo')");
-			$consulta->execute();
-			return $objetoAccesoDato->RetornarUltimoIdInsertado();
-				
 
+    public static function TraerUnAlumno($id)
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,edad as edad, legajo as legajo from alumno where id = $id");
+        $consulta->execute();
+        $alumnoBuscado = $consulta->fetchObject('alumno');
+        return $alumnoBuscado;
+    }
+
+    public function InsertarElAlumno()
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into Alumno (nombre,apellido,edad,legajo)values('$this->nombre','$this->apellido','$this->edad','$this->legajo')");
+        $consulta->execute();
+        return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
 
 
     public function ModificarAlumno()
     {
 
-           $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
-            $consulta =$objetoAccesoDato->RetornarConsulta("
+        $consulta = $objetoAccesoDato->RetornarConsulta("
                UPDATE Alumno 
                SET nombre = '$this->nombre',
                apellido = '$this->apellido',
                edad= '$this->edad',
                legajo= '$this->legajo'
                WHERE id = '$this->id'");
-               
-         
-             
-           return $consulta->execute();
 
+
+
+        return $consulta->execute();
     }
 
     public function BorrarUnAlumno()
-	{
+    {
 
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("
 				delete 
 				from alumno 				
-				WHERE id=:id");	
-				$consulta->bindValue(':id',$this->id, PDO::PARAM_INT);		
-				$consulta->execute();
-				return $consulta->rowCount();
-
+				WHERE id=:id");
+        $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $consulta->execute();
+        return $consulta->rowCount();
     }
-     
+
 
     public function mostrarDatos()
     {
-         return "Metodo mostar:".$this->nombre."  ".$this->apellido."  ".$this->edad." ".$this->legajo."";
+        return "Metodo mostar:" . $this->nombre . "  " . $this->apellido . "  " . $this->edad . " " . $this->legajo . "";
     }
 
-    public static function TraerUnAlumnoLegajo($id,$legajo) 
-	{
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select  nombre as nombre, apellido as apellido, edad as edad from alumno  WHERE id=? AND legajo=?");
-			$consulta->execute(array($id, $legajo));
-			$alumnoBuscado= $consulta->fetchObject('alumno');
-      		return $alumnoBuscado;				
-
-			
+    public static function TraerUnAlumnoLegajo($id, $legajo)
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("select  nombre as nombre, apellido as apellido, edad as edad from alumno  WHERE id=? AND legajo=?");
+        $consulta->execute(array($id, $legajo));
+        $alumnoBuscado = $consulta->fetchObject('alumno');
+        return $alumnoBuscado;
     }
 
-    public static function TraerUnAlumnonParamNombre($id,$legajo) 
-	{
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select  nombre as nombre, apellido as apellido,edad as edad from alumno  WHERE id=:id AND legajo=:legajo");
-			$consulta->bindValue(':id', $id, PDO::PARAM_INT);
-			$consulta->bindValue(':legajo', $legajo, PDO::PARAM_INT);
-			$consulta->execute();
-			$alumnoBuscado= $consulta->fetchObject('alumno');
-      		return $alumnoBuscado;				
+    public static function TraerUnAlumnonParamNombre($id, $legajo)
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("select  nombre as nombre, apellido as apellido,edad as edad from alumno  WHERE id=:id AND legajo=:legajo");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->bindValue(':legajo', $legajo, PDO::PARAM_INT);
+        $consulta->execute();
+        $alumnoBuscado = $consulta->fetchObject('alumno');
+        return $alumnoBuscado;
+    }
 
-			
-	}
-    
 
 
     private $pathJson = "..\LISTAALUMNOS\Listado_de_Alumnos.json";
 
     private $pathJson2 = "..\LISTAALUMNOS\Listado_de_Alumnos_a.json";
 
-    // private $pathTxt = "./LISTAALUMNOS/Listado_de_Alumnos.txt";
+    private $pathTxt = "..\LISTAALUMNOS\Listado_de_Alumnos.txt";
+
+    private $pathXml = "..\LISTAALUMNOS\Listado_de_Alumnos.xml";
 
 
-    public function Guardar()
+
+    public function SaveAsJSON($id)
     {
+        $alumnoS = new Alumno();
+        $myfile = fopen($alumnoS->pathJson, "r");
 
-        $this->SaveAsJSON();
+        $jsonNuevo = $alumnoS->retornarJSON($id);
 
-        $this->SaveAsJSONArray();
+        $myfile = fopen($alumnoS->pathJson, "a+");
 
-        // $this->SaveAsTXT();           
+        fwrite($myfile, $jsonNuevo . "\n");
 
-    }
-
-     public function SaveAsJSON()
-    {
-
-        $myfile = fopen($this->pathJson, "r");
-
-        $jsonNuevo = $this->retornarJSON();
-
-
-
-            $myfile = fopen($this->pathJson, "a+");
-
-            fwrite($myfile,$jsonNuevo . "\n");
-
-            fclose($myfile);
-
+        fclose($myfile);
     }
 
     public function SaveAsJSONArray()
 
     {
 
-
-
-
-        $nuevoAlumnoJson = $this->retornarJSON();
+        $nuevoAlumnoJson = $this->retornarJSONArray();
 
         $arrayJson = json_decode($nuevoAlumnoJson);
 
@@ -181,21 +150,18 @@ class Alumno{
 
         $json_decoded = json_decode($contenidoJson);
 
-        
 
-        if(isset($json_decoded))
 
-        {     
+        if (isset($json_decoded)) {
 
             foreach ($arrayJson as $key => $value) {
 
-                $claseAux -> $key = $value;
-
+                $claseAux->$key = $value;
             }
 
-            
 
-            array_push($json_decoded,$claseAux);        
+
+            array_push($json_decoded, $claseAux);
 
             fclose($myfile);
 
@@ -203,154 +169,183 @@ class Alumno{
 
             $myfile = fopen($this->pathJson2, "w+");
 
-            fwrite($myfile,"");        
+            fwrite($myfile, "");
 
             fclose($myfile);
 
 
 
-            $myfile = fopen($this->pathJson2, "a");       
+            $myfile = fopen($this->pathJson2, "a");
 
 
 
-            for ($i=0; $i < count($json_decoded); $i++) { 
+            for ($i = 0; $i < count($json_decoded); $i++) {
 
 
 
                 $jsonArray_1 = json_encode($json_decoded[$i]);
 
-                
 
-                if($i==0)
 
-                {
+                if ($i == 0) {
 
                     echo "[" . $jsonArray_1 . "," . "\n";
 
-                    fwrite($myfile,"[" . $jsonArray_1 . "," . "\n"); 
-
-                }
-
-                else if($i+1 == count($json_decoded))
-
-                {
+                    fwrite($myfile, "[" . $jsonArray_1 . "," . "\n");
+                } else if ($i + 1 == count($json_decoded)) {
 
                     echo $jsonArray_1 . "]" . "\n";
 
-                    fwrite($myfile, $jsonArray_1 . "]" . "\n"); 
-
-                }
-
-                else
-
-                {
+                    fwrite($myfile, $jsonArray_1 . "]" . "\n");
+                } else {
 
                     echo $jsonArray_1 . "," . "\n";
 
-                    fwrite($myfile,$jsonArray_1 . "," . "\n"); 
-
+                    fwrite($myfile, $jsonArray_1 . "," . "\n");
                 }
-
-            }   
+            }
 
             fclose($myfile);
+        } else {
 
+            $myfile = fopen($this->pathJson2, "w+");
+
+            fwrite($myfile, "[" . $nuevoAlumnoJson . "]" . "\n");
+
+            echo "[" . $nuevoAlumnoJson . "]" . "\n";
+
+            fclose($myfile);
+        }
     }
 
-    else
-
+    function retornarJSON($id)
     {
 
-        $myfile = fopen($this->pathJson2, "w+");
+        $objAlumno = new Alumno();
 
-        fwrite($myfile,"[" . $nuevoAlumnoJson . "]" . "\n"); 
+        $objJson = $objAlumno->TraerUnAlumno($id);
+        var_dump($objJson);
 
-        echo "[" . $nuevoAlumnoJson . "]" . "\n";
-
-        fclose($myfile);
-
+        return json_encode($objJson, true);
     }
 
-    }
 
-    function retornarJSON()
+    function retornarJSONArray()
     {
 
-         $objAlumno = new Alumno($this->nombre,$this->apellido,$this->edad,$this->legajo());
+        $objAlumno = new Alumno();
 
-        return json_encode($objAlumno,true);
+        $objJson = $objAlumno->TraerTodoLosAlumnos();
+        var_dump($objJson);
 
+        return json_encode($objJson, true);
     }
 
-    public function Legajo(){
+    public function Legajo()
+    {
 
         return $this->legajo;
-
     }
- 
+
+    public function SaveAsTXT()
+    {
+
+        $alumnoTxt = "$this->id , $this->nombre , $this->apellido , $this->edad , $this->legajo";
+        $alumnoA = new Alumno();
+        $myfileTxt = fopen($alumnoA->pathTxt, "a+");
+
+        fwrite($myfileTxt, $alumnoTxt . "\n");
+
+        fclose($myfileTxt);
+    }
 
 
     //         //Obtengo el Alumno Actual
 
-//         //Abro el Archivo en modo lectura unicamente para obtener los datos y trabajarlos como un array de clases std
+    //         //Abro el Archivo en modo lectura unicamente para obtener los datos y trabajarlos como un array de clases std
 
-//         //El Alumno actual lo transformo en clase std y lo agrego al array que obtengo del archivo (Como array de clases porque al hacerle json_decode del get_content lo devuelve así array(stdclass))
+    //         //El Alumno actual lo transformo en clase std y lo agrego al array que obtengo del archivo (Como array de clases porque al hacerle json_decode del get_content lo devuelve así array(stdclass))
 
-//         //Cierro el archivo y lo vuelvo a abrir para vaciarlo (En caso de falla deberia guardarlo en un bkp)
+    //         //Cierro el archivo y lo vuelvo a abrir para vaciarlo (En caso de falla deberia guardarlo en un bkp)
 
-//         //Vuelvo a abrir el archivo en modo append para lopear el array e ir agregando todos los elementos, incluso el nuevo
+    //         //Vuelvo a abrir el archivo en modo append para lopear el array e ir agregando todos los elementos, incluso el nuevo
 
-//         //Cierro el archivo
+    //         //Cierro el archivo
 
 
-}
-     
-     
-    
-    /**function __construct($pnombre,$papellido,$pedad,$plegajo) {
 
-        parent::__construct($pnombre,$papellido,$pedad);
 
-        $this->legajo = $plegajo;
+    public function SaveInXML($alumnoXml)
+    {
+        $xml = new DomDocument('1.0', 'UTF-8');
+        $xml = $this->CrearObjetoXml($alumnoXml, $xml);
+        $gestor = fopen($alumnoXml->pathXml, 'a+');
 
+        var_dump($el_xml = $xml->saveXML());
+        fwrite($gestor, $el_xml);
+        fclose($gestor);
     }
-//     **/
+
+
+
+    public function SaveInXMLArray($alumnoXml)
+    {
+        $xml = new DomDocument('1.0', 'UTF-8');
+        $gestor = fopen($alumnoXml->pathXml, 'a+');
+        $alumnoAux = new Alumno();
+
+        foreach ($alumnoXml as $alumnoAux){
+
+            if(isset($alumnoAux)){
+
+            $xml = $this->CrearObjetoXml($alumnoAux, $xml);
+            var_dump($xml);
+
+            $el_xml = $xml->saveXML();
+            fwrite($gestor, $el_xml);
+            }
+            
+        }
+
+        fclose($gestor);
+    }
+
+    public function CrearObjetoXml($alumnoXml, $xml)
+    {
+
+
+        $CAlumno = $xml->createElement('Alumno');
+        $CAlumno = $xml->appendChild($CAlumno);
+
+
+        $CAlumno->setAttribute('nombre', 'apellido', 'edad', 'legajo', 'id');
+
+        $nombreXml = $xml->createElement('nombre', $alumnoXml->nombre);
+        $nombreXml = $CAlumno->appendChild($nombreXml);
+
+
+        $apellidoXml = $xml->createElement('apellido', $alumnoXml->apellido);
+        $apellidoXml = $CAlumno->appendChild($apellidoXml);
+
+        $edadXml = $xml->createElement('edad', $alumnoXml->edad);
+        $edadXml = $CAlumno->appendChild($edadXml);
+
+        $legajoXml = $xml->createElement('legajo', $alumnoXml->legajo);
+        $legajoXml = $CAlumno->appendChild($legajoXml);
+
+        $idXml = $xml->createElement('id', $alumnoXml->id);
+        $idXml = $CAlumno->appendChild($idXml);
+
+        $xml->formatOutput = true;
+
+        return $xml;
+    }
+}
 
 
 
 
 
-
-
-
-
-
-
-
-
-//     
-//     public function SaveAsTXT()
-
-//     {
-
-//         $alumnoTxt = "$this->nombre , $this->apellido , $this->edad , $this->legajo";
-
-//         $myfileTxt = fopen($this->pathTxt, "a+");
-
-//         fwrite($myfileTxt, $alumnoTxt . "\n");
-
-//         fclose($myfileTxt);
-
-//     }
-
-//     
-//     public function SaveInXML()
-
-//     {
-
-
-
-//     }
 
 //     public function GuardarFoto($file)
 
@@ -497,5 +492,3 @@ class Alumno{
 //     }
 
 // }
-
-?>
